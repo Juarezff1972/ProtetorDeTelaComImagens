@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.IO;
+using System.Diagnostics;
 
 
 //using System.Diagnostics;
@@ -752,8 +753,8 @@ namespace ScreenSaver
             Color tcol2;
             Graphics g;
             Random random = new();
-            a = random.Next( 0, 2 );
-            //a = 1;
+            //a = random.Next( 0, 2 );
+            a = 1;
             g = Graphics.FromImage( bmp1 );
             for (c = 0; c < p; c++)
             {
@@ -803,6 +804,7 @@ namespace ScreenSaver
 
             }
             g.Dispose();
+            fasterFader();
         }
 
         private void splitEvenH()
@@ -864,7 +866,8 @@ namespace ScreenSaver
             Graphics g;
             Random random = new();
             g = Graphics.FromImage( bmp1 );
-            a = random.Next( 0, 2 );
+            //a = random.Next( 0, 2 );
+            a = 1;
             c = random.Next( 0, 2 );
             d = Math.Sqrt( this.Width * this.Width + this.Height * this.Height );
             xc = ( this.Width / 2 ) - 1;
@@ -1105,6 +1108,7 @@ namespace ScreenSaver
 
             }
             g.Dispose();
+            fasterFader();
         }
 
         private void entrelacoV()
@@ -1169,6 +1173,7 @@ namespace ScreenSaver
                 pictureBox1.Refresh();
                 Application.DoEvents();
             }
+            fasterFader();
         }
 
         private void entrelacoH()
@@ -1233,6 +1238,7 @@ namespace ScreenSaver
                 pictureBox1.Refresh();
                 Application.DoEvents();
             }
+            fasterFader();
         }
 
         private void quadDraw(int x1, int x2, int y1, int y2, Graphics g)
@@ -1249,7 +1255,8 @@ namespace ScreenSaver
             //area = dx * dy;
             if (( dx < 8 ) || ( dy < 8 ))
             {
-                for (mx = x1; mx <= x2; mx++)
+                //fasterFader();
+                /*for (mx = x1; mx <= x2; mx++)
                 {
                     for (my = y1; my <= y2; my++)
                     {
@@ -1258,7 +1265,7 @@ namespace ScreenSaver
                         bmp1.SetPixel( mx, my, tcol2 );
                     }
                     pictureBox1.Image = bmp1;
-                }
+                }*/
                 return;
             }
                 
@@ -1310,7 +1317,7 @@ namespace ScreenSaver
             g = Graphics.FromImage( bmp1 );
             quad( 0, this.Width - 1, 0, this.Height - 1, g );
             g.Dispose();
-            fader();
+            fasterFader();
         }
 
         private void redimensiona()
@@ -1326,7 +1333,7 @@ namespace ScreenSaver
             tw = this.Width - 1;
             t = tw * th;
             escala = 1;
-            while (t > 2)
+            while (t > 8)
             {
                 x = ( tw + 1 ) / escala;
                 y = ( th + 1 ) / escala;
@@ -1364,6 +1371,7 @@ namespace ScreenSaver
                 }
             }
             g.Dispose();
+            fasterFader();
         }
 
         private void fader()
@@ -1385,6 +1393,25 @@ namespace ScreenSaver
             }
         }
 
+       private void fasterFader()
+        {
+            ImageTransparency it;
+            it = new ImageTransparency();
+            float i;
+            Bitmap b;
+            Graphics g;
+            for (i = 0; i <= 50; i++)
+            {
+                b = it.ChangeOpacity(bmp2, i / 50);
+                g = Graphics.FromImage(bmp1);
+                g.DrawImage(b, 0, 0, this.Width, this.Height);
+                g.Dispose();
+                pictureBox1.Image = bmp1;
+                pictureBox1.Refresh();
+                Application.DoEvents();
+            }
+        }
+
         private void DrawShape()
         {
             Random random = new();
@@ -1394,6 +1421,7 @@ namespace ScreenSaver
             //try
             //{
             tmrMain.Enabled = false;
+            //Debug.WriteLine("ALGO: " + algo.ToString());
 
             switch (algo)
             {
